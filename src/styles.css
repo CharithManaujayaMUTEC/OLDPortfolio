@@ -411,3 +411,4 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
   .footer-top { grid-template-columns: 1fr; }
   .hero-scroll { display: none; }
 }
+.hero-media .duo img { object-position: 50% 12%; }
