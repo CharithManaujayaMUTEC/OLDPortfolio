@@ -20,7 +20,6 @@ function Hero() {
         <Photo src={h.image} alt={site.general.site_name} pose={3} className="hero-media" />
       )}
       <div className="hero-shade" />
-      <div className="hero-mark" aria-hidden><i /><i /><i /></div>
       <div className="hero-title">
         <h1 className="display hero-word" aria-label={`${h.title} ${h.subtitle}`}>
           <span className="glitch" data-text={h.title}>{h.title}</span>
@@ -32,7 +31,6 @@ function Hero() {
           {h.cta_secondary_label && <Btn to={h.cta_secondary_href} variant="ghost">{h.cta_secondary_label}</Btn>}
         </div>
       </div>
-      <div className="hero-dots" aria-hidden><b>01</b>{[...Array(7)].map((_, i) => <i key={i} />)}</div>
       <div className="hero-scroll"><span>{h.scroll_text}</span><i /></div>
     </section>
   )
