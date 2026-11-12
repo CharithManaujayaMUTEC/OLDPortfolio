@@ -1,4 +1,4 @@
-import { mockFor } from './mockData'
+import { mockFor, mockFamilyPage } from './mockData'
 
 export const API_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1').replace(/\/$/, '')
 
@@ -44,9 +44,10 @@ export async function getWithFallback(path) {
       ? { districts: [...new Set(data.map((c) => c.district))].sort(), styles: [] }
       : path.startsWith('/events') ? { categories: [...new Set((Array.isArray(data) ? data : []).map((x) => x.category))] }
       : path.startsWith('/gallery') ? { categories: [...new Set((Array.isArray(data) ? data : []).map((x) => x.category))] } : undefined
-    return { data, filters, offline: true }
+    return { data, filters, page: path.startsWith('/family-events/') ? mockFamilyPage : undefined, offline: true }
   }
 }
 
 export const post = (path, body) => request(path, { method: 'POST', body: body instanceof FormData ? body : JSON.stringify(body) }, 15000)
 export const get = (path) => request(path)
+export const del = (path) => request(path, { method: 'DELETE' }, 15000)

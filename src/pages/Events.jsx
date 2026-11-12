@@ -9,6 +9,7 @@ import BookingModal from '../components/BookingModal'
 import { Btn, Empty, Eyebrow, Loader, Prose, TextLink } from '../components/Bits'
 import { EventCard } from '../components/Cards'
 import { PageHead } from './Classes'
+import { FamilyEventsStrip } from './Family'
 import { NotFound } from './Misc'
 
 export default function Events() {
@@ -23,6 +24,7 @@ export default function Events() {
   return (
     <>
       <PageHead eyebrow="Events" title="Shows, workshops & battles" text="Reserve tickets for upcoming shows and masterclasses, or relive the nights you missed." />
+      <FamilyEventsStrip />
       <section className="wrap block">
         <div className="tabs">
           <button className={tab === 'upcoming' ? 'on' : ''} onClick={() => setTab('upcoming')}>Upcoming <sup>{upcoming.length}</sup></button>

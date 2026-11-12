@@ -16,7 +16,7 @@ const merge = (base, over) => {
 }
 
 const loadedFonts = new Set()
-function loadFont(name) {
+export function loadFont(name) {
   if (!name || loadedFonts.has(name)) return
   loadedFonts.add(name)
   const l = document.createElement('link')

@@ -412,3 +412,90 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
   .hero-scroll { display: none; }
 }
 .hero-media .duo img { object-position: 50% 12%; }
+
+/* ============ family events: invitations & tickets (colours come from the admin ticket design) ============ */
+.tk-page { background: var(--tk-bg, #0b0c10); color: var(--tk-text, #f4f5f7); font-family: var(--tk-body, var(--font-body)); min-height: 100vh; padding-bottom: 90px; }
+.tk-page .muted, .tk-note, .tk-by { color: var(--tk-muted); }
+.tk-solo { padding-top: calc(var(--header-h) + 28px); }
+.tk-hero { position: relative; min-height: 44vh; display: flex; align-items: flex-end; isolation: isolate; }
+.tk-hero-photo { position: absolute !important; inset: 0; z-index: -2; }
+.tk-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(5,6,10,.35), transparent 35%, var(--tk-bg)); }
+.tk-hero-copy { padding: calc(var(--header-h) + 50px) 0 34px; display: grid; gap: 8px; width: min(820px, 100% - var(--gutter) * 2); margin-inline: auto; }
+.tk-hero-copy small { letter-spacing: .28em; text-transform: uppercase; font-size: 11px; color: var(--tk-accent); font-weight: 700; }
+.tk-hero-copy h1 { font-family: var(--tk-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: clamp(28px, 6vw, 56px); line-height: 1; margin: 0; }
+.tk-hero-copy p { color: var(--tk-muted); margin: 0; }
+.tk-content { display: grid; gap: 26px; padding-top: 6px; }
+.tk-hello h2 { font-family: var(--tk-display); font-style: italic; text-transform: uppercase; font-size: clamp(22px, 4vw, 32px); margin: 0 0 8px; }
+.tk-hello p { color: var(--tk-muted); margin: 0 0 18px; }
+.allowance { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 14px; }
+.pips { display: flex; gap: 8px; }
+.pips i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--tk-accent); }
+.pips i.on { background: var(--tk-accent); }
+.tk-form, .tk-list { background: var(--tk-card); border-radius: var(--tk-radius); padding: clamp(18px, 3vw, 28px); display: grid; gap: 16px; border: 1px solid rgba(255,255,255,.08); }
+.tk-form h3, .tk-list h3 { font-family: var(--tk-display); font-style: italic; text-transform: uppercase; font-size: 18px; margin: 0; }
+.tk-row { border: 1px solid rgba(255,255,255,.1); border-radius: calc(var(--tk-radius) * .7); padding: 14px; display: grid; gap: 12px; }
+.tk-row-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.tk-row-head button, .mini-actions button, .mini-actions a { color: var(--tk-accent); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-decoration: underline; text-underline-offset: 3px; }
+.mini-actions .danger { color: #ff7b6b; }
+.tk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-grid label { display: grid; gap: 6px; }
+.tk-grid span { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--tk-muted); font-weight: 600; }
+.tk-grid em { color: #ff8a6a; font-style: normal; font-size: 12px; }
+.tk-grid input, .tk-grid select { width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); color: var(--tk-text); padding: 12px 14px; border-radius: calc(var(--tk-radius) * .6); outline: none; font: inherit; }
+.tk-grid select option { color: #000; }
+.tk-grid input:focus, .tk-grid select:focus { border-color: var(--tk-accent); }
+.tk-add { color: var(--tk-accent); font-weight: 700; font-size: 14px; text-align: left; }
+.tk-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 26px; background: var(--tk-accent); color: var(--tk-bg); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; border-radius: calc(var(--tk-radius) * .7); border: 0; cursor: pointer; }
+.tk-btn.ghost { background: transparent; color: var(--tk-text); border: 1px solid rgba(255,255,255,.25); }
+.tk-btn:disabled { opacity: .5; cursor: not-allowed; }
+.tk-note { font-size: 13px; margin: 0; }
+.tk-page .notice { background: rgba(255,255,255,.06); }
+.mini-ticket { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; padding: 14px; border-radius: calc(var(--tk-radius) * .8); border: 1px solid rgba(255,255,255,.1); }
+.mini-qr { background: #fff; padding: 8px; border-radius: 10px; line-height: 0; }
+.mini-info { display: grid; gap: 4px; }
+.mini-info b { font-size: 17px; }
+.mini-info > span { color: var(--tk-muted); font-size: 13px; }
+.mini-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 4px; }
+.mini-ticket.st-cancelled .mini-qr { opacity: .3; }
+.tk-status { font-style: normal; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: #1f7a4c; width: fit-content; color: #fff; }
+.tk-status.s-pending { background: #8a6a12; } .tk-status.s-checked_in { background: #2563eb; } .tk-status.s-cancelled { background: #8a2a1a; }
+
+/* the ticket itself */
+.tk-demo { text-align: center; font-size: 13px; color: var(--tk-muted); margin: 0 0 16px; }
+.tk { max-width: 440px; margin: 0 auto; background: var(--tk-card); border-radius: var(--tk-radius); overflow: hidden; border: 1px solid rgba(255,255,255,.1); box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+.tk-banner { position: relative; height: 180px; }
+.tk-banner .photo { position: absolute; inset: 0; }
+.tk-banner-shade { position: absolute; inset: 0; background: linear-gradient(rgba(5,6,10,.15), rgba(5,6,10,.55)); }
+.tk-banner-top { position: absolute; inset: 14px 16px auto 16px; display: flex; justify-content: space-between; align-items: center; }
+.tk-logo { height: 30px; width: auto; }
+.tk-admit { font-family: var(--tk-display); font-size: 11px; letter-spacing: .3em; padding: 7px 12px; background: var(--tk-accent); color: var(--tk-bg); font-weight: 800; border-radius: 4px; }
+.tk-main { padding: 22px 26px 18px; display: grid; gap: 18px; }
+.tk-main h1 { font-family: var(--tk-display); font-style: italic; font-weight: 800; text-transform: uppercase; font-size: 24px; line-height: 1.05; margin: 0; }
+.tk-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 14px; }
+.tk-meta small, .tk-guest small { display: block; font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: var(--tk-muted); margin-bottom: 3px; }
+.tk-meta b { font-size: 14px; }
+.tk-guest { border-left: 3px solid var(--tk-accent); padding-left: 14px; display: grid; gap: 2px; }
+.tk-guest b { font-size: 22px; font-family: var(--tk-display); font-style: italic; text-transform: uppercase; line-height: 1.1; }
+.tk-guest span { color: var(--tk-muted); font-size: 14px; }
+.tk-perf { display: flex; align-items: center; margin: 4px 0; }
+.tk-perf i { width: 24px; height: 24px; border-radius: 50%; background: var(--tk-bg); flex: none; }
+.tk-perf i:first-child { margin-left: -12px; } .tk-perf i:last-child { margin-right: -12px; }
+.tk-perf hr { flex: 1; border: 0; border-top: 2px dashed rgba(255,255,255,.2); margin: 0 8px; }
+.tk-stub { padding: 10px 26px 28px; text-align: center; display: grid; gap: 12px; justify-items: center; }
+.tk-qrwrap { position: relative; background: #fff; padding: 12px; border-radius: 14px; line-height: 0; }
+.tk-qrwrap.dead svg { opacity: .12; }
+.tk-stamp { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--tk-display); font-weight: 800; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-12deg); color: #b91c1c; line-height: 1.1; text-align: center; padding: 10px; }
+.tk-stamp.s-checked_in { color: #1d4ed8; } .tk-stamp.s-pending { color: #b45309; }
+.tk-code { font-family: ui-monospace, Consolas, monospace; letter-spacing: .16em; font-size: 15px; color: var(--tk-text); }
+.tk-footer { font-size: 13px; color: var(--tk-text); margin: 0; max-width: 34ch; }
+.tk-terms { font-size: 11px; color: var(--tk-muted); margin: 0; max-width: 40ch; line-height: 1.5; }
+.tk-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 24px; }
+.tk-page.plain .duo { background: none; } .tk-page.plain .duo img { filter: none; mix-blend-mode: normal; } .tk-page.plain .duo::after { display: none; }
+.family-strip { padding-bottom: 20px; }
+@media (max-width: 560px) { .tk-grid { grid-template-columns: 1fr; } .mini-ticket { grid-template-columns: 1fr; justify-items: center; text-align: center; } .mini-actions { justify-content: center; } .tk-status { margin-inline: auto; } }
+@media print {
+  .header, .footer, .wa-fab, .offline-badge, .grain, .tk-actions, .tk-demo { display: none !important; }
+  body, .tk-page { background: #fff !important; }
+  .tk-solo { padding-top: 0 !important; }
+  .tk { box-shadow: none; break-inside: avoid; border-color: #ccc; }
+}

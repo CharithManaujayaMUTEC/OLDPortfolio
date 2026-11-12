@@ -192,11 +192,54 @@ export const mockHome = {
   posts: mockPosts,
 }
 
+// ---------------------------------------------------------------- family events (invite-only ticketing)
+export const mockTicketDesign = {
+  bg_color: '#0b0c10', card_color: '#13151b', text_color: '#f4f5f7', muted_color: '#9aa3b2', accent_color: '#ff5a1f', primary_color: '#3b7bd9',
+  font_display: 'Unbounded', font_body: 'Inter', radius: 14, header_text: 'ADMIT ONE',
+  footer_text: 'Please show this QR code at the entrance. One scan per person.',
+  terms_text: 'This ticket is non-transferable and valid for one entry. Doors open 30 minutes before the start.',
+  banner_image: null, logo: null, show_student: true, show_relationship: true, show_venue: true, duotone: true, qr_fg: '#0b0c10', qr_bg: '#ffffff',
+}
+export const mockFamilyPage = {
+  request_title: 'Get your invitation',
+  request_text: 'Enter the mobile number registered with your dance class. We will send your personal ticket link by SMS / WhatsApp.',
+  request_sent: 'If that number is registered with a class, your personal link is on its way by SMS / WhatsApp.',
+  invite_intro: 'Add each family member who is coming. Every person gets their own ticket with a QR code.',
+  success_text: 'Your tickets are ready! We also sent the link to your mobile.',
+  closed_text: 'Ticket registration is closed for this event.',
+  pending_text: 'Your tickets are waiting for approval. We will message you once they are confirmed.',
+}
+const mockFamilyEvent = {
+  id: 1, slug: 'family-showcase', title: 'Annual Family Showcase', summary: 'An evening for our dance family: students, parents and loved ones.',
+  description: '<p>Our students take the stage and their families cheer them on. This is a closed event for class students and their relatives.</p><p>Every student can register tickets for their family: mother, father, brothers, sisters, grandparents and close friends.</p>',
+  starts_at: days(30), ends_at: days(30, 21), venue: { name: 'Lionel Wendt Theatre', address: '18 Guildford Crescent, Colombo 07', map_url: null },
+  cover: null, status: 'open', registration_open: true, allow_self_request: true, registration_closes_at: null, seats_left: null,
+}
+const mockRelationships = [
+  ['student', 'Student (myself)'], ['mother', 'Mother'], ['father', 'Father'], ['sister', 'Sister'], ['brother', 'Brother'],
+  ['grandmother', 'Grandmother'], ['grandfather', 'Grandfather'], ['aunt', 'Aunt'], ['uncle', 'Uncle'], ['guardian', 'Guardian'],
+  ['friend', 'Friend'], ['other', 'Other (add a remark)'],
+].map(([value, label]) => ({ value, label }))
+export const mockDemoTicket = {
+  code: 'DEMO', display_code: 'DEMO-SAMPLE-TICKET', holder_name: 'Sample Guest', relationship: 'mother', relationship_label: 'Mother', remark: null,
+  status: 'issued', checked_in_at: null, qr_value: 'https://example.com/t/DEMO', event: mockFamilyEvent, student_name: 'Sample Student',
+  design: mockTicketDesign, demo: true,
+}
+const mockDemoInvitation = {
+  token: 'demo', event: mockFamilyEvent, student: { name: 'Sample Student', first_name: 'Sample' }, mobile_hint: '+9477 *** 567',
+  allowance: 4, used: 1, remaining: 3, can_register: true, requires_approval: false,
+  tickets: [{ ...mockDemoTicket, holder_name: 'Sample Student', relationship: 'student', relationship_label: 'Student (myself)' }],
+  relationships: mockRelationships, page: mockFamilyPage, design: mockTicketDesign, demo: true,
+}
+
 // path -> mock payload (matches the `data` field of the API response)
 export const mockFor = (path) => {
   const clean = path.split('?')[0].replace(/^\//, '')
   const [root, slug] = clean.split('/')
   switch (root) {
+    case 'family-events': return slug ? (slug === mockFamilyEvent.slug ? mockFamilyEvent : null) : [mockFamilyEvent]
+    case 'tickets': return slug && slug.toLowerCase() === 'demo' ? mockDemoTicket : null // real tickets are never faked
+    case 'invitations': return slug && slug.toLowerCase() === 'demo' ? mockDemoInvitation : null
     case 'site': return mockSite
     case 'home': return mockHome
     case 'styles': return mockStyles
