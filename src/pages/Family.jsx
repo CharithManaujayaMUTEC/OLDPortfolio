@@ -23,7 +23,7 @@ const statusLabel = { issued: 'Valid', pending: 'Awaiting approval', checked_in:
 
 function icsFor(event) {
   const f = (iso) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Oshan Liyanage//Family Events//EN', 'BEGIN:VEVENT', `UID:${event.slug}@oshan`, `DTSTAMP:${f(new Date())}`,
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Oshan Liyanage//Internal Events//EN', 'BEGIN:VEVENT', `UID:${event.slug}@oshan`, `DTSTAMP:${f(new Date())}`,
     `DTSTART:${f(event.starts_at)}`, `DTEND:${f(event.ends_at || new Date(new Date(event.starts_at).getTime() + 3 * 3600e3))}`, `SUMMARY:${event.title}`,
     `LOCATION:${[event.venue?.name, event.venue?.address].filter(Boolean).join(', ')}`, 'END:VEVENT', 'END:VCALENDAR']
   const url = URL.createObjectURL(new Blob([lines.join('\r\n')], { type: 'text/calendar' }))
@@ -37,12 +37,12 @@ export function FamilyEventsStrip() {
   if (!data?.length) return null
   return (
     <section className="wrap block family-strip">
-      <SectionHead eyebrow="Closed events" title="For our dance family" />
-      <p className="muted" style={{ marginTop: -20, marginBottom: 28, maxWidth: '60ch' }}>Invitation-only events for class students and their relatives. Students can register tickets for the whole family.</p>
+      <SectionHead eyebrow="Academy events" title="Internal events" />
+      <p className="muted" style={{ marginTop: -20, marginBottom: 28, maxWidth: '60ch' }}>Invitation-only events for class students and their relatives. Students register tickets for their own guests: mother, father, relatives and close ones.</p>
       <div className="grid3">
         {data.map((e, i) => (
           <Reveal key={e.id} delay={i * 80}>
-            <Link to={`/family/${e.slug}`} className="card event-card">
+            <Link to={`/internal-events/${e.slug}`} className="card event-card">
               <Photo src={e.cover} alt={e.title} pose={i + 4} tone="warm" className="card-photo">
                 <div className="date-tag"><b>{dd(e.starts_at)}</b><span>{mon(e.starts_at)}</span></div>
                 <span className="chip">Invite only</span>
@@ -82,7 +82,7 @@ export function FamilyEventDetail() {
       <section className="detail-hero">
         <Photo src={e.cover} alt={e.title} pose={4} tone="warm" className="detail-cover" />
         <div className="detail-hero-copy wrap">
-          <Eyebrow>Invitation only · class students & families</Eyebrow>
+          <Eyebrow>Invitation only · class students & their guests</Eyebrow>
           <h1 className="display h1">{e.title}</h1>
           <p className="lead">{fmtDate(e.starts_at, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · {fmtTime(e.starts_at)}</p>
         </div>
@@ -208,7 +208,7 @@ export function InvitePage() {
       <div className="tk-hero">
         <Photo src={d.banner_image || e.cover} alt={e.title} pose={4} tone="warm" className={`tk-hero-photo ${d.duotone ? '' : 'plain'}`} />
         <div className="tk-hero-copy wrap narrow">
-          <small>{inv.demo ? 'SAMPLE · ' : ''}Family tickets</small>
+          <small>{inv.demo ? 'SAMPLE · ' : ''}Event tickets</small>
           <h1>{e.title}</h1>
           <p>{fmtDate(e.starts_at, { weekday: 'long', day: 'numeric', month: 'long' })} · {fmtTime(e.starts_at)} · {e.venue?.name}</p>
         </div>

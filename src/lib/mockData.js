@@ -204,14 +204,14 @@ export const mockFamilyPage = {
   request_title: 'Get your invitation',
   request_text: 'Enter the mobile number registered with your dance class. We will send your personal ticket link by SMS / WhatsApp.',
   request_sent: 'If that number is registered with a class, your personal link is on its way by SMS / WhatsApp.',
-  invite_intro: 'Add each family member who is coming. Every person gets their own ticket with a QR code.',
+  invite_intro: 'Add each guest who is coming (family or close ones). Every person gets their own ticket with a QR code.',
   success_text: 'Your tickets are ready! We also sent the link to your mobile.',
   closed_text: 'Ticket registration is closed for this event.',
   pending_text: 'Your tickets are waiting for approval. We will message you once they are confirmed.',
 }
 const mockFamilyEvent = {
-  id: 1, slug: 'family-showcase', title: 'Annual Family Showcase', summary: 'An evening for our dance family: students, parents and loved ones.',
-  description: '<p>Our students take the stage and their families cheer them on. This is a closed event for class students and their relatives.</p><p>Every student can register tickets for their family: mother, father, brothers, sisters, grandparents and close friends.</p>',
+  id: 1, slug: 'academy-showcase', title: 'Annual Academy Showcase', summary: 'An evening at the academy: students, parents and loved ones.',
+  description: '<p>Our students take the stage and their loved ones cheer them on. This is an internal event for class students and their relatives.</p><p>Every student can register tickets for their guests: mother, father, brothers, sisters, grandparents and close friends.</p>',
   starts_at: days(30), ends_at: days(30, 21), venue: { name: 'Lionel Wendt Theatre', address: '18 Guildford Crescent, Colombo 07', map_url: null },
   cover: null, status: 'open', registration_open: true, allow_self_request: true, registration_closes_at: null, seats_left: null,
 }
