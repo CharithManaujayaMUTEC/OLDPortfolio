@@ -493,9 +493,23 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
 .tk-page.plain .duo { background: none; } .tk-page.plain .duo img { filter: none; mix-blend-mode: normal; } .tk-page.plain .duo::after { display: none; }
 .family-strip { padding-bottom: 20px; }
 @media (max-width: 560px) { .tk-grid { grid-template-columns: 1fr; } .mini-ticket { grid-template-columns: 1fr; justify-items: center; text-align: center; } .mini-actions { justify-content: center; } .tk-status { margin-inline: auto; } }
+@page { size: A4 portrait; margin: 10mm; }
 @media print {
-  .header, .footer, .wa-fab, .offline-badge, .grain, .tk-actions, .tk-demo { display: none !important; }
-  body, .tk-page { background: #fff !important; }
+  /* keep the ticket's colours and photo exactly as designed (browsers drop backgrounds by default) */
+  html, body, .tk-page, .tk, .tk * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .header, .footer, .wa-fab, .offline-badge, .grain, .tk-actions, .tk-demo, .mobile-menu { display: none !important; }
+  html, body { background: #fff !important; }
+  .tk-page { background: #fff !important; --tk-bg: #fff; min-height: 0; padding: 0 !important; }
   .tk-solo { padding-top: 0 !important; }
-  .tk { box-shadow: none; break-inside: avoid; border-color: #ccc; }
+  .tk-page .wrap { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
+  .tk { box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; border: 1px solid #bbb; max-width: 400px; margin: 0 auto; }
+  .tk-banner { height: 140px; }
+  .tk-main { padding: 16px 22px 12px; gap: 12px; }
+  .tk-main h1 { font-size: 21px; }
+  .tk-stub { padding: 6px 22px 18px; gap: 8px; }
+  .tk-qrwrap { background: #fff !important; }
+  .tk-banner .duo img { mix-blend-mode: normal !important; filter: none !important; }
+  .tk-banner .duo::after { display: none !important; }
+  .tk-banner .duo { background: var(--tk-card) !important; }
 }
+
