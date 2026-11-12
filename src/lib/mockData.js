@@ -212,7 +212,7 @@ export const mockFamilyPage = {
 const mockFamilyEvent = {
   id: 1, slug: 'academy-showcase', title: 'Annual Academy Showcase', summary: 'An evening at the academy: students, parents and loved ones.',
   description: '<p>Our students take the stage and their loved ones cheer them on. This is an internal event for class students and their relatives.</p><p>Every student can register tickets for their guests: mother, father, brothers, sisters, grandparents and close friends.</p>',
-  starts_at: days(30), ends_at: days(30, 21), venue: { name: 'Lionel Wendt Theatre', address: '18 Guildford Crescent, Colombo 07', map_url: null },
+  pricing: { ticket: 1500, student: 0, currency: 'LKR' }, starts_at: days(30), ends_at: days(30, 21), venue: { name: 'Lionel Wendt Theatre', address: '18 Guildford Crescent, Colombo 07', map_url: null },
   cover: null, status: 'open', registration_open: true, allow_self_request: true, registration_closes_at: null, seats_left: null,
 }
 const mockRelationships = [

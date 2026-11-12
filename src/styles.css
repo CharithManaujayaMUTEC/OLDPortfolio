@@ -449,6 +449,14 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
 .tk-btn.ghost { background: transparent; color: var(--tk-text); border: 1px solid rgba(255,255,255,.25); }
 .tk-btn:disabled { opacity: .5; cursor: not-allowed; }
 .tk-note { font-size: 13px; margin: 0; }
+.tk-pay { display: grid; gap: 14px; padding-top: 6px; border-top: 1px dashed rgba(255,255,255,.18); }
+.tk-sum { display: grid; gap: 8px; margin: 0; font-size: 14px; }
+.tk-sum > div { display: flex; justify-content: space-between; gap: 16px; }
+.tk-sum dt { color: var(--tk-muted); } .tk-sum dd { margin: 0; font-weight: 700; }
+.tk-sum-total { border-top: 1px solid rgba(255,255,255,.14); padding-top: 8px; font-size: 16px; } .tk-sum-total dt { color: var(--tk-text); }
+.tk-page .pay-panel { background: rgba(255,255,255,.05); border-radius: calc(var(--tk-radius) * .7); padding: 16px; display: grid; gap: 12px; color: var(--tk-text); }
+.tk-page .pay-panel h4 { margin: 0; } .tk-page .bank { display: grid; gap: 6px; margin: 0; } .tk-page .bank > div { display: flex; justify-content: space-between; gap: 12px; } .tk-page .bank dt { color: var(--tk-muted); } .tk-page .bank dd { margin: 0; font-weight: 600; text-align: right; }
+.tk-page .receipt-form { display: grid; gap: 10px; } .tk-page .receipt-form input[type=text], .tk-page .receipt-form input[type=file] { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); color: var(--tk-text); padding: 10px 12px; border-radius: 8px; font: inherit; }
 .tk-page .notice { background: rgba(255,255,255,.06); }
 .mini-ticket { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; padding: 14px; border-radius: calc(var(--tk-radius) * .8); border: 1px solid rgba(255,255,255,.1); }
 .mini-qr { background: #fff; padding: 8px; border-radius: 10px; line-height: 0; }
@@ -458,7 +466,7 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
 .mini-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 4px; }
 .mini-ticket.st-cancelled .mini-qr { opacity: .3; }
 .tk-status { font-style: normal; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: #1f7a4c; width: fit-content; color: #fff; }
-.tk-status.s-pending { background: #8a6a12; } .tk-status.s-checked_in { background: #2563eb; } .tk-status.s-cancelled { background: #8a2a1a; }
+.tk-status.s-pending, .tk-status.s-awaiting_payment { background: #8a6a12; } .tk-status.s-checked_in { background: #2563eb; } .tk-status.s-cancelled { background: #8a2a1a; }
 
 /* the ticket itself */
 .tk-demo { text-align: center; font-size: 13px; color: var(--tk-muted); margin: 0 0 16px; }
@@ -485,7 +493,7 @@ h1, h2, h3, h4, p, dl, dd, figure, blockquote { margin: 0; }
 .tk-qrwrap { position: relative; background: #fff; padding: 12px; border-radius: 14px; line-height: 0; }
 .tk-qrwrap.dead svg { opacity: .12; }
 .tk-stamp { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--tk-display); font-weight: 800; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-12deg); color: #b91c1c; line-height: 1.1; text-align: center; padding: 10px; }
-.tk-stamp.s-checked_in { color: #1d4ed8; } .tk-stamp.s-pending { color: #b45309; }
+.tk-stamp.s-awaiting_payment { color: #b45309; font-size: 18px; } .tk-stamp.s-checked_in { color: #1d4ed8; } .tk-stamp.s-pending { color: #b45309; }
 .tk-code { font-family: ui-monospace, Consolas, monospace; letter-spacing: .16em; font-size: 15px; color: var(--tk-text); }
 .tk-footer { font-size: 13px; color: var(--tk-text); margin: 0; max-width: 34ch; }
 .tk-terms { font-size: 11px; color: var(--tk-muted); margin: 0; max-width: 40ch; line-height: 1.5; }

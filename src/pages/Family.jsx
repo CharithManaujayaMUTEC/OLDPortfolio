@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { useApi } from '../lib/useApi'
 import { del, getWithFallback, post } from '../lib/api'
-import { fmtDate, fmtTime, dd, mon } from '../lib/format'
+import { fmtDate, fmtTime, dd, mon, money } from '../lib/format'
+import { useSite } from '../context/SiteContext'
+import { PaymentPanel } from '../components/BookingModal'
 import { loadFont } from '../context/SiteContext'
 import Photo from '../components/Photo'
 import Reveal from '../components/Reveal'
@@ -19,7 +21,7 @@ const themeStyle = (d = {}) => ({
 })
 const useTicketFonts = (d) => useEffect(() => { if (d) { loadFont(d.font_display); loadFont(d.font_body) } }, [d])
 
-const statusLabel = { issued: 'Valid', pending: 'Awaiting approval', checked_in: 'Checked in', cancelled: 'Cancelled' }
+const statusLabel = { issued: 'Valid', pending: 'Awaiting approval', awaiting_payment: 'Awaiting payment', checked_in: 'Checked in', cancelled: 'Cancelled' }
 
 function icsFor(event) {
   const f = (iso) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')
@@ -64,11 +66,24 @@ export function FamilyEventsStrip() {
 export function FamilyEventDetail() {
   const { slug } = useParams()
   const { data: e, page, loading, error } = useApi(`/family-events/${slug}`)
+  const { site } = useSite()
+  const navigate = useNavigate()
   const [mobile, setMobile] = useState('')
+  const [name, setName] = useState('')
+  const [buy, setBuy] = useState({ busy: false, err: '' })
   const [st, setSt] = useState({ busy: false, msg: '', err: '' })
   if (loading) return <Loader />
   if (error || !e) return <NotFound />
   const p = page || {}
+  const price = e.pricing || { ticket: 0, student: 0 }
+  const priced = price.ticket > 0 || price.student > 0
+
+  const verify = async (ev) => {
+    ev.preventDefault()
+    setBuy({ busy: true, err: '' })
+    try { const r = await post(`/family-events/${slug}/verify-student`, { mobile, name }); navigate(`/invite/${r.token}`) }
+    catch (ex) { setBuy({ busy: false, err: ex.status ? ex.message : 'We could not reach the server. Please try again shortly.' }) }
+  }
 
   const submit = async (ev) => {
     ev.preventDefault()
@@ -98,10 +113,27 @@ export function FamilyEventDetail() {
             <div><dt>Time</dt><dd>{fmtTime(e.starts_at)}{e.ends_at ? ` – ${fmtTime(e.ends_at)}` : ''}</dd></div>
             <div><dt>Venue</dt><dd>{e.venue?.name || 'To be announced'}{e.venue?.address && <><br /><small className="muted">{e.venue.address}</small></>}</dd></div>
             {e.seats_left != null && <div><dt>Seats left</dt><dd>{e.seats_left}</dd></div>}
+            <div><dt>Tickets</dt><dd>{priced ? <>{money(price.ticket, site)} per guest{price.student !== price.ticket && <><br /><small className="muted">Student: {price.student === 0 ? 'free' : money(price.student, site)}</small></>}</> : 'Free for students and their guests'}</dd></div>
           </dl>
 
+          {e.registration_open && e.allow_self_request && (
+            <form onSubmit={verify} className="form" style={{ padding: 0, border: 0, background: 'none' }}>
+              <h3 className="h3" style={{ margin: 0 }}>Get your tickets</h3>
+              <p className="muted small">For current class students only. Enter your name and the mobile number registered with your class, then add your family and friends.</p>
+              <label className="field"><span>Student&apos;s full name</span>
+                <input autoComplete="name" placeholder="As registered with the academy" value={name} onChange={(x) => setName(x.target.value)} required />
+              </label>
+              <label className="field"><span>Registered mobile number</span>
+                <input inputMode="tel" autoComplete="tel" placeholder="07X XXX XXXX" value={mobile} onChange={(x) => setMobile(x.target.value)} required />
+              </label>
+              {buy.err && <p className="notice err">{buy.err}</p>}
+              <Btn type="submit" disabled={buy.busy}>{buy.busy ? 'Checking…' : 'Continue to tickets'}</Btn>
+              <p className="muted small">Only students enrolled in our classes can buy tickets. Not recognised? Ask your coach to check your details.</p>
+            </form>
+          )}
+
           {e.registration_open && e.allow_self_request ? (
-            <form onSubmit={submit} className="form" style={{ padding: 0, border: 0, background: 'none' }}>
+            <form onSubmit={submit} className="form" style={{ padding: 0, border: 0, background: 'none', marginTop: 18 }}>
               <h3 className="h3" style={{ margin: 0 }}>{p.request_title}</h3>
               <p className="muted small">{p.request_text}</p>
               <label className="field"><span>Registered mobile number</span>
@@ -125,7 +157,7 @@ export function FamilyEventDetail() {
 /* ------------------------------------------------------------- family tickets */
 const emptyRow = (over = {}) => ({ holder_name: '', relationship: 'mother', remark: '', holder_phone: '', ...over })
 
-function MiniTicket({ t, design, onCancel, canCancel }) {
+function MiniTicket({ t, design, onCancel, canCancel, freeEvent }) {
   const [copied, setCopied] = useState(false)
   const url = `${window.location.origin}/t/${t.code}`
   return (
@@ -138,7 +170,7 @@ function MiniTicket({ t, design, onCancel, canCancel }) {
         <div className="mini-actions">
           <Link to={`/t/${t.code}`}>Open ticket</Link>
           <button type="button" onClick={() => { navigator.clipboard?.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1500) }}>{copied ? 'Copied' : 'Copy link'}</button>
-          {canCancel && ['issued', 'pending'].includes(t.status) && <button type="button" className="danger" onClick={() => onCancel(t)}>Remove</button>}
+          {canCancel && (t.status === 'issued' ? freeEvent : ['pending', 'awaiting_payment'].includes(t.status)) && <button type="button" className="danger" onClick={() => onCancel(t)}>Remove</button>}
         </div>
       </div>
     </div>
@@ -153,6 +185,12 @@ export function InvitePage() {
   const [busy, setBusy] = useState(false)
   const [errs, setErrs] = useState({ general: '', rows: {} })
   const [done, setDone] = useState(false)
+  const { site } = useSite()
+  const { data: methods } = useApi('/payment-methods')
+  const [methodId, setMethodId] = useState(null)
+  const [email, setEmail] = useState('')
+  const [order, setOrder] = useState(null)
+  useEffect(() => { if (methods?.length && !methodId) setMethodId(methods[0].id) }, [methods, methodId])
 
   useEffect(() => {
     let alive = true
@@ -175,6 +213,15 @@ export function InvitePage() {
   const p = inv.page || {}
   const setRow = (i, k, v) => setRows((rs) => rs.map((r, x) => (x === i ? { ...r, [k]: v } : r)))
   const canAdd = rows.length < inv.remaining
+  const pricing = e.pricing || { ticket: 0, student: 0 }
+  const unit = (rel) => (rel === 'student' ? pricing.student : pricing.ticket)
+  const subtotal = rows.reduce((sum, r) => sum + unit(r.relationship), 0)
+  const method = methods?.find((m) => m.id === methodId)
+  const fee = subtotal * ((method?.fee_percent || 0) / 100)
+  const tax = subtotal * ((site?.payments?.tax_percent || 0) / 100)
+  const total = subtotal + fee + tax
+  const paid = subtotal > 0
+  const freeEvent = pricing.ticket === 0 && pricing.student === 0
 
   const submit = async (ev) => {
     ev.preventDefault()
@@ -185,10 +232,15 @@ export function InvitePage() {
       if (r.relationship === 'other' && !r.remark.trim()) bad[i] = { ...bad[i], remark: 'Tell us how they are connected' }
     })
     if (Object.keys(bad).length) return setErrs({ general: '', rows: bad })
+    if (paid && !/^\S+@\S+\.\S+$/.test(email)) return setErrs({ general: 'Enter a valid email address for your payment receipt.', rows: {} })
+    if (paid && !methodId) return setErrs({ general: 'Choose how you will pay.', rows: {} })
     setBusy(true)
     try {
-      const res = await post(`/invitations/${token}/tickets`, { tickets: rows.map((r) => ({ ...r, holder_phone: r.holder_phone || null, remark: r.remark || null })) })
-      setInv(res.data); setRows([]); setDone(true)
+      const res = await post(`/invitations/${token}/tickets`, {
+        tickets: rows.map((r) => ({ ...r, holder_phone: r.holder_phone || null, remark: r.remark || null })),
+        ...(paid ? { email, payment_method_id: methodId, return_url: window.location.origin } : {}),
+      })
+      setInv(res.data); setRows([]); setDone(true); setOrder(res.booking ? { booking: res.booking, payment: res.payment } : null)
       setTimeout(() => document.getElementById('my-tickets')?.scrollIntoView({ behavior: 'smooth' }), 100)
     } catch (ex) {
       const rowErr = {}
@@ -224,7 +276,21 @@ export function InvitePage() {
           </div>
         </div>
 
-        {done && <p className="notice ok">{inv.requires_approval ? p.pending_text : p.success_text}</p>}
+        {done && !order && <p className="notice ok">{inv.requires_approval ? p.pending_text : p.success_text}</p>}
+        {order && (
+          <div className="tk-form" id="pay-now">
+            <h3>Complete your payment</h3>
+            <p className="tk-note">Your {order.booking.quantity} ticket{order.booking.quantity > 1 ? 's are' : ' is'} reserved. They are issued, and the links sent to your mobile, as soon as the payment is confirmed. Booking reference <b>{order.booking.reference}</b> · total <b>{money(order.booking.amount, site)}</b>.</p>
+            <PaymentPanel booking={order.booking} payment={order.payment} />
+          </div>
+        )}
+        {!order && (inv.open_orders || []).map((o) => (
+          <div className="tk-form" key={o.booking.reference}>
+            <h3>Payment due · {o.booking.reference}</h3>
+            <p className="tk-note">{o.booking.quantity} ticket{o.booking.quantity > 1 ? 's' : ''} · {money(o.booking.amount, site)} · {o.booking.payment_status === 'awaiting_verification' ? 'receipt received, waiting for confirmation' : 'waiting for payment'}. Unpaid orders are released after {site?.payments?.hold_hours || 48} hours.</p>
+            <PaymentPanel booking={o.booking} payment={o.payment} />
+          </div>
+        ))}
 
         {inv.can_register && rows.length > 0 && (
           <form onSubmit={submit} className="tk-form">
@@ -247,9 +313,27 @@ export function InvitePage() {
                 </div>
               </div>
             ))}
+            {paid && (
+              <div className="tk-pay">
+                <div className="tk-grid">
+                  <label><span>Your email (for the receipt)</span><input type="email" autoComplete="email" value={email} onChange={(x) => setEmail(x.target.value)} /></label>
+                  <label><span>Pay with</span>
+                    <select value={methodId || ''} onChange={(x) => setMethodId(Number(x.target.value))}>
+                      {(methods || []).map((m) => <option key={m.id} value={m.id}>{m.name}{m.fee_percent > 0 ? ` (+${m.fee_percent}% fee)` : ''}</option>)}
+                    </select>
+                  </label>
+                </div>
+                <dl className="tk-sum">
+                  {rows.map((r, i) => <div key={i}><dt>{r.holder_name || `Guest ${inv.used + i + 1}`}</dt><dd>{unit(r.relationship) === 0 ? 'Free' : money(unit(r.relationship), site)}</dd></div>)}
+                  {fee > 0 && <div><dt>Payment fee</dt><dd>{money(fee, site)}</dd></div>}
+                  {tax > 0 && <div><dt>Tax</dt><dd>{money(tax, site)}</dd></div>}
+                  <div className="tk-sum-total"><dt>Total</dt><dd>{money(total, site)}</dd></div>
+                </dl>
+              </div>
+            )}
             {canAdd && <button type="button" className="tk-add" onClick={() => setRows((rs) => [...rs, emptyRow()])}>+ Add another guest ({inv.remaining - rows.length} more allowed)</button>}
             {errs.general && <p className="notice err">{errs.general}</p>}
-            <button type="submit" className="tk-btn" disabled={busy}>{busy ? 'Creating tickets…' : `Get ${rows.length} ticket${rows.length > 1 ? 's' : ''}`}</button>
+            <button type="submit" className="tk-btn" disabled={busy}>{busy ? 'Please wait…' : paid ? `Reserve ${rows.length} ticket${rows.length > 1 ? 's' : ''} · ${money(total, site)}` : `Get ${rows.length} ticket${rows.length > 1 ? 's' : ''}`}</button>
             {inv.mobile_hint && <p className="tk-note">Ticket links are sent to {inv.mobile_hint}.</p>}
           </form>
         )}
@@ -261,7 +345,7 @@ export function InvitePage() {
           <div id="my-tickets" className="tk-list">
             <h3>Your tickets</h3>
             <p className="tk-note">Each person shows their own QR code at the entrance. Open a ticket to save or print it, or forward the link.</p>
-            {inv.tickets.map((t) => <MiniTicket key={t.code} t={t} design={d} canCancel={!inv.demo && new Date(e.starts_at) > new Date()} onCancel={cancel} />)}
+            {inv.tickets.map((t) => <MiniTicket key={t.code} freeEvent={freeEvent} t={t} design={d} canCancel={!inv.demo && new Date(e.starts_at) > new Date()} onCancel={cancel} />)}
           </div>
         )}
       </div>
@@ -279,7 +363,7 @@ export function TicketPage() {
   if (loading) return <Loader />
   if (error || !t) return <NotFound />
   const e = t.event
-  const dead = t.status === 'cancelled'
+  const dead = ['cancelled', 'awaiting_payment'].includes(t.status)
 
   return (
     <div className={`tk-page tk-solo ${d.duotone ? '' : 'plain'}`} style={style}>
