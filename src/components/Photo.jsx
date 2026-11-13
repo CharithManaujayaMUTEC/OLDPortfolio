@@ -3,7 +3,7 @@ import Art from './Art'
 import { DEFAULT_IMAGES } from '../lib/defaultImages'
 
 /**
- * Photo with the site's duotone treatment.
+ * Photo shown in its true colours (no filter).
  * Uses the admin-uploaded `src`; if none, a default dance photo; if that fails to load, generated artwork.
  */
 export default function Photo({ src, alt = '', pose = 0, flip = false, tone = 'blue', className = '', children }) {
