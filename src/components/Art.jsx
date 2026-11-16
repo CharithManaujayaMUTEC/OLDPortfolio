@@ -24,7 +24,7 @@ function Figure({ pose, stroke }) {
   )
 }
 
-/** On-brand placeholder artwork: blue duotone field + motion-blurred dancer silhouette. */
+/** On-brand placeholder artwork: red duotone field + motion-blurred dancer silhouette. */
 export default function Art({ pose = 0, label, className = '', flip = false, tone = 'blue' }) {
   const id = useId().replace(/:/g, '')
   const warm = tone === 'warm'
@@ -33,9 +33,9 @@ export default function Art({ pose = 0, label, className = '', flip = false, ton
       <svg viewBox="0 0 300 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id={`bg${id}`} cx="50%" cy="38%" r="75%">
-            <stop offset="0%" stopColor={warm ? '#ffb27a' : '#9cc4f5'} />
+            <stop offset="0%" stopColor={warm ? '#ffb27a' : '#ff8a8a'} />
             <stop offset="45%" stopColor={warm ? '#e0551c' : 'var(--primary)'} />
-            <stop offset="100%" stopColor={warm ? '#3a1408' : '#0f2547'} />
+            <stop offset="100%" stopColor={warm ? '#3a1408' : '#2a0508'} />
           </radialGradient>
           <filter id={`blur${id}`} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3.2" /></filter>
           <filter id={`soft${id}`} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1" /></filter>
@@ -50,8 +50,8 @@ export default function Art({ pose = 0, label, className = '', flip = false, ton
         <rect x="-3000" y="-3000" width="6300" height="6300" fill={`url(#bg${id})`} />
         <rect x="-1500" y="-1500" width="3300" height="3300" filter={`url(#noise${id})`} opacity=".3" />
         <g className="art-fig" transform={`translate(${flip ? 245 : 55} 10) scale(${flip ? -0.95 : 0.95} 0.95)`}>
-          <g filter={`url(#blur${id})`} opacity=".75" transform="translate(-14 4)"><Figure pose={pose} stroke={warm ? '#3b7bd9' : '#ff7a3d'} /></g>
-          <g filter={`url(#blur${id})`} opacity=".55" transform="translate(18 -2)"><Figure pose={pose} stroke={warm ? '#ffd1b0' : '#0b1b36'} /></g>
+          <g filter={`url(#blur${id})`} opacity=".75" transform="translate(-14 4)"><Figure pose={pose} stroke={warm ? '#e11d2e' : '#ff7a3d'} /></g>
+          <g filter={`url(#blur${id})`} opacity=".55" transform="translate(18 -2)"><Figure pose={pose} stroke={warm ? '#ffd1b0' : '#360a0e'} /></g>
           <g filter={`url(#soft${id})`}><Figure pose={pose} stroke="#070810" /></g>
           <g className="glitch-a" clipPath={`url(#s1${id})`}><g transform="translate(5 0)"><Figure pose={pose} stroke="#6aa8ff" /></g></g>
           <g className="glitch-b" clipPath={`url(#s2${id})`}><g transform="translate(-6 0)"><Figure pose={pose} stroke="#ff5a1f" /></g></g>

@@ -4,11 +4,13 @@ import Home from './pages/Home'
 import Classes, { ClassDetail } from './pages/Classes'
 import Events, { EventDetail } from './pages/Events'
 import { About, Contact, Gallery, Journal, NotFound, PostDetail, TrackBooking } from './pages/Misc'
+import StudentRegistration from './pages/StudentRegistration'
 import { FamilyEventDetail, InvitePage, TicketPage } from './pages/Family'
 
 export default function App() {
   return (
     <Routes>
+      <Route path="r/:token" element={<StudentRegistration />} />
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="classes" element={<Classes />} />

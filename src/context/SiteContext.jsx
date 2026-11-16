@@ -29,7 +29,7 @@ function applyTheme(site) {
   const t = site.theme
   const r = document.documentElement
   const set = (k, v) => v && r.style.setProperty(k, v)
-  set('--primary', t.primary); set('--accent', t.accent); set('--bg', t.background)
+  set('--accent', t.accent); set('--bg', t.background)
   set('--surface', t.surface); set('--text', t.text); set('--muted', t.muted)
   r.style.setProperty('--radius', `${t.radius ?? 2}px`)
   r.style.setProperty('--font-display', `'${t.font_display}', 'Archivo Black', sans-serif`)

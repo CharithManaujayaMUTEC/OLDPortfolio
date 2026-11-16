@@ -28,7 +28,7 @@ export const mockSite = {
     seo: { title: 'Oshan Liyanage — Dance Coach & Artist, Sri Lanka', description: 'Book dance classes island-wide, join workshops and get tickets to shows and events with Oshan Liyanage.', og_image: null },
   },
   theme: {
-    primary: '#3b7bd9', accent: '#ff5a1f', background: '#0b0c10', surface: '#13151b', text: '#f4f5f7', muted: '#9aa3b2',
+    primary: '#e11d2e', accent: '#ff5a1f', background: '#0b0c10', surface: '#13151b', text: '#f4f5f7', muted: '#9aa3b2',
     font_display: 'Unbounded', font_body: 'Inter', duotone: true, grain: true, glitch: true, radius: 2,
   },
   nav: {
@@ -194,7 +194,7 @@ export const mockHome = {
 
 // ---------------------------------------------------------------- family events (invite-only ticketing)
 export const mockTicketDesign = {
-  bg_color: '#0b0c10', card_color: '#13151b', text_color: '#f4f5f7', muted_color: '#9aa3b2', accent_color: '#ff5a1f', primary_color: '#3b7bd9',
+  bg_color: '#0b0c10', card_color: '#13151b', text_color: '#f4f5f7', muted_color: '#9aa3b2', accent_color: '#ff5a1f', primary_color: '#e11d2e',
   font_display: 'Unbounded', font_body: 'Inter', radius: 14, header_text: 'ADMIT ONE',
   footer_text: 'Please show this QR code at the entrance. One scan per person.',
   terms_text: 'This ticket is non-transferable and valid for one entry. Doors open 30 minutes before the start.',
